@@ -1,4 +1,4 @@
-package org.bittwit;
+package org.bittwit.fileparser;
 
 import static org.junit.Assert.assertTrue;
 
