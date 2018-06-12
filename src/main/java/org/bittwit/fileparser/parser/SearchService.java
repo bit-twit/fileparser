@@ -6,12 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class SearchService {
-    private static final Integer DEFAULT_WORKER_WAIT = 1000;
     private final Config fileConfig;
     private final File outputFile;
     private final Integer numberOfWorkers;
@@ -27,7 +28,7 @@ public class SearchService {
         ExecutorService executor = Executors.newFixedThreadPool(numberOfWorkers);
 
         List<CompletableFuture<SearchResult>> tasks = fileConfig.getFiles().stream()
-                .map(file -> searchFile(executor, file))
+                .map(file -> scheduleSearch(executor, new MaxSearcher(file)::get))
                 .map(future -> {
                     future.handle((result, error) -> {
                         if (error != null) {
@@ -77,8 +78,8 @@ public class SearchService {
         }
     }
 
-    protected CompletableFuture<SearchResult> searchFile(final Executor executor, final File file) {
-        System.out.println(String.format("Searching in file: %s", file.getName()));
-        return CompletableFuture.supplyAsync(() -> new SearchResult(file, 0), executor);
+    protected CompletableFuture<SearchResult> scheduleSearch(final Executor executor, final Supplier<SearchResult> supplier) {
+        return CompletableFuture.supplyAsync(supplier, executor);
     }
+
 }
