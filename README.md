@@ -34,6 +34,7 @@ Deliverables: source code, input files, output files. May be on a git hub locati
 * generate test files with org.bittwit.fileparser.generator.TestGenerator.main
     * currently this works from an IDE
     * you can tune org.bittwit.fileparser.generator.TestGenerator.INTEGER_LIMIT to create different size files
+    * currently unit test org.bittwit.fileparser.AppTest only outputs results, should be improved to actually check pre-computed max for each generated file with result in the final output file
 * use Makefile targets to run tests
 
     ```
