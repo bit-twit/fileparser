@@ -1,13 +1,13 @@
 package org.bittwit.fileparser;
 
-import static org.junit.Assert.assertTrue;
-
+import org.bittwit.fileparser.generator.TestGenerator;
 import org.junit.Test;
 
 public class AppTest {
 
     @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue( true );
+    public void main() {
+        new TestGenerator().generateFiles();
+        App.main(new String[]{});
     }
 }
