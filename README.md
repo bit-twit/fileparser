@@ -28,3 +28,14 @@ Program reads the file location from a config file, named max.conf that will be 
 File where it writes the result will be also located in the same folder.
 
 Deliverables: source code, input files, output files. May be on a git hub location, a zip file or whatever is fine for you.
+
+# RUN
+
+* generate test files with org.bittwit.fileparser.generator.TestGenerator.main
+    * currently this works from an IDE
+    * you can tune org.bittwit.fileparser.generator.TestGenerator.INTEGER_LIMIT to create different size files
+* use Makefile targets to run tests
+
+    ```
+    make build
+    ```

@@ -16,7 +16,7 @@ public class App {
         File configFile = new File(relativeToWorkingPath(CONFIG_FILE));
         Config config = ConfigParser.parse(configFile);
         File outputFile = new File(relativeToWorkingPath(RESULT_FILE));
-        createIfNecessary(outputFile);
+        createNew(outputFile);
         SearchService service = new SearchService(config, outputFile,  4);
         service.computeMax();
     }
@@ -25,7 +25,7 @@ public class App {
         return System.getProperty("user.dir") + File.separator + fileName;
     }
 
-    public static void createIfNecessary(final File outputFile) {
+    public static void createNew(final File outputFile) {
         if (!outputFile.exists()) {
             File parentFolder = outputFile.getParentFile();
             if (!parentFolder.exists()) {
@@ -35,6 +35,9 @@ public class App {
                 }
             }
             try {
+                if (outputFile.exists()) {
+                    outputFile.delete();
+                }
                 outputFile.createNewFile();
             }
             catch (IOException e) {

@@ -3,7 +3,6 @@ package org.bittwit.fileparser.generator;
 import org.bittwit.fileparser.App;
 import org.bittwit.fileparser.config.Config;
 import org.bittwit.fileparser.config.ConfigParser;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +19,14 @@ import static org.bittwit.fileparser.App.relativeToWorkingPath;
  * Uses same config file as main application.
  */
 public class TestGenerator {
-    private static final Integer INTEGER_LIMIT = 1000;
+    private static final Integer INTEGER_LIMIT = 2;
     private static final String DELIMITER = ";";
     private static final Integer DELIMITER_DECIMAL_POINT = 59;
     private Random random = new Random();
+
+    public static void main(String[] args) {
+        new TestGenerator().generateFiles();
+    }
 
     public void generateFiles() {
         List<File> results = generateFilesFromConfig(App.CONFIG_FILE);
@@ -37,7 +40,7 @@ public class TestGenerator {
         Config config = ConfigParser.parse(new File(relativeToWorkingPath(configPath)));
         List<File> processedFiles = new ArrayList<>();
         for (File outputFile : config.getFiles()) {
-            App.createIfNecessary(outputFile);
+            App.createNew(outputFile);
             try(PrintWriter pw = new PrintWriter(Files.newBufferedWriter(outputFile.toPath()))) {
                 generateIntegers(random.nextInt(INTEGER_LIMIT)).stream()
                         .map(number -> {
@@ -70,7 +73,7 @@ public class TestGenerator {
      */
     protected String generateASCIICharacters(final Integer limit, final Set<Integer> decimalExcluded) {
         return IntStream.generate(() -> random.nextInt(126))
-                .filter(decimalExcluded::contains)
+                .filter(intCharValue -> !decimalExcluded.contains(intCharValue))
                 .limit(limit)
                 .boxed()
                 .map(number -> Character.valueOf((char)number.byteValue()).toString())
